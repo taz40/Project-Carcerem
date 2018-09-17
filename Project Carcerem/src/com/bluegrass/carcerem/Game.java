@@ -47,6 +47,7 @@ public class Game extends Canvas implements Runnable {
 	//The title of the window
 	public static final String TITLE = "Project Carcerem";
 	
+	//The current mouse mode
 	public MouseMode mode = MouseMode.SELECT;
 	
 	//main method
