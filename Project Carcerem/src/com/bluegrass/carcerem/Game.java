@@ -75,17 +75,22 @@ public class Game extends Canvas implements Runnable {
 		Dimension size = new Dimension(width * scale, height * scale);
 		this.setPreferredSize(size);
 		
+		//initialize the screen and the window
 		screen = new Screen(width, height, this);
 		frame = new JFrame();
 	}
 	
+	//start the game
 	public synchronized void start() {
+		//start the game thread
 		running = true;
 		thread = new Thread(this, "Display");
 		thread.start();
 	}
 	
+	//stop the game
 	public synchronized void stop() {
+		//stop the game thread
 		running = false;
 		try {
 			thread.join();
@@ -94,21 +99,32 @@ public class Game extends Canvas implements Runnable {
 		}
 	}
 
+	//game loop
 	@Override
 	public void run() {
+		//last time in nanoseconds
 		long lastTime = System.nanoTime();
+		//last time in miliseconds
 		long timer = System.currentTimeMillis();
+		//change in time sence last frame
 		double deltaTime = 0;
+		//frames this second so far
 		int frames = 0;
 		while(running) {
+			//get time, and calculate the change
 			long currentTime = System.nanoTime();
 			deltaTime += currentTime - lastTime;
 			lastTime = currentTime;
+			//update the game, based on the time elapsed
 			update(deltaTime / 1000000000.0);
+			//render the game
 			render();
+			//another frame this second
 			frames++;
+			//check if a second has passed
 			currentTime = System.currentTimeMillis();
 			if(currentTime - timer > 1000) {
+				//set title with the fps value
 				frame.setTitle(TITLE + " | " + frames + " fps");
 				frames = 0;
 				timer = currentTime;
@@ -117,27 +133,33 @@ public class Game extends Canvas implements Runnable {
 		}
 	}
 
+	//render the game
 	private void render() {
+		//make sure we are triple buffering
 		BufferStrategy bs = this.getBufferStrategy();
 		if(bs == null) {
 			this.createBufferStrategy(3);
 			return;
 		}
-		
+		//clear and render the screen
 		screen.clear();
 		screen.render();
 		
+		//copy screen into the image
 		for(int i = 0; i < pixels.length; i++) {
 			pixels[i] = screen.pixels[i];
 		}
 		
+		//draw the image
 		Graphics g = bs.getDrawGraphics();
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), 0, 0, width, height, null);
 		g.dispose();
 		bs.show();
 	}
 
+	//update the game
 	private void update(double deltaTime) {
+		//check for movement
 		if(keyboard.getKeyDown(KeyEvent.VK_W) || keyboard.getKeyDown(KeyEvent.VK_UP))
 			screen.yOffset -= 64.0 * deltaTime;
 		if(keyboard.getKeyDown(KeyEvent.VK_S) || keyboard.getKeyDown(KeyEvent.VK_DOWN))
@@ -146,9 +168,12 @@ public class Game extends Canvas implements Runnable {
 			screen.xOffset += 64.0 * deltaTime;
 		if(keyboard.getKeyDown(KeyEvent.VK_A) || keyboard.getKeyDown(KeyEvent.VK_LEFT))
 			screen.xOffset -= 64.0 * deltaTime;
+		
+		//find the tile the mouse is hovering over
 		screen.mouseTileX = (int) Math.floor(((mouse.getX() / scale) + screen.xOffset) / 16);
 		screen.mouseTileY = (int) Math.floor(((mouse.getY() / scale) + screen.yOffset) / 16);
 		
+		//switch between modes if the ESC key is pressed
 		if(keyboard.getKey(KeyEvent.VK_ESCAPE)) {
 			switch(mode) {
 			case SELECT:
@@ -166,6 +191,7 @@ public class Game extends Canvas implements Runnable {
 			}
 		}
 		
+		//change tiles based on mode
 		switch(mode) {
 		case SELECT:
 			break;
