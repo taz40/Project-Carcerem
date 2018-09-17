@@ -15,6 +15,7 @@ import com.bluegrass.carcerem.graphics.Sprite;
 import com.bluegrass.carcerem.input.Keyboard;
 import com.bluegrass.carcerem.input.Mouse;
 import com.bluegrass.carcerem.input.Mouse.MouseMode;
+import com.bluegrass.carcerem.level.Level;
 import com.bluegrass.carcerem.level.Tile;
 
 //The Main class
@@ -159,6 +160,7 @@ public class Game extends Canvas implements Runnable {
 
 	//update the game
 	private void update(double deltaTime) {
+		screen.level.update(deltaTime);
 		//check for movement
 		if(keyboard.getKeyDown(KeyEvent.VK_W) || keyboard.getKeyDown(KeyEvent.VK_UP))
 			screen.yOffset -= 64.0 * deltaTime;

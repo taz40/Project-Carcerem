@@ -6,6 +6,7 @@ public class Sprite {
 	public static Sprite wood = new Sprite(16, 1, 0, SpriteSheet.sheet);
 	public static Sprite water = new Sprite(16, 2, 0, SpriteSheet.sheet);
 	public static Sprite selectSprite = new Sprite(16, 3, 0, SpriteSheet.sheet);
+	public static Sprite constructionWorker = new Sprite(16, 4, 0, SpriteSheet.sheet);
 	
 	public final int SIZE;
 	private int x, y;

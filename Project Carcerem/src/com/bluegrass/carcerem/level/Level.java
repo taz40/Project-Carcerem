@@ -1,7 +1,10 @@
 package com.bluegrass.carcerem.level;
 
+import java.util.ArrayList;
 import java.util.Random;
 
+import com.bluegrass.carcerem.entity.Entity;
+import com.bluegrass.carcerem.entity.mob.ConstructionWorker;
 import com.bluegrass.carcerem.graphics.Screen;
 
 public class Level {
@@ -9,6 +12,8 @@ public class Level {
 	public int width;
 	public int height;
 	public Tile[] tiles;
+	
+	public ArrayList<Entity> entities = new ArrayList<Entity>();
 	
 	public final Tile[] tileMap = {
 			Tile.grass,
@@ -24,6 +29,7 @@ public class Level {
 		for(int i = 0; i < tiles.length; i++) {
 			tiles[i] = tileMap[rand.nextInt(tileMap.length)];
 		}
+		entities.add(new ConstructionWorker(this, 0, 4 * 16));
 	}
 	
 	public void render(Screen screen) {
@@ -37,6 +43,18 @@ public class Level {
 				tiles[tileIndex].render(screenX, screenY, screen);
 			}
 		}
+		
+		for(Entity e : entities) {
+			e.render(screen);
+		}
+	}
+	
+	public void update(double deltaTime) {
+		for(Entity e : entities) {
+			e.update(deltaTime);
+		}
+		
+		
 	}
 	
 	public void setTile(int x, int y, Tile tile) {
