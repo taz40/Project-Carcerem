@@ -88,7 +88,7 @@ public class Screen {
 		case SELECT:
 			break;
 		case SINGLE:
-			renderSprite((mouseTileX*16) - (int)xOffset, (mouseTileY * 16) - (int)yOffset, Sprite.selectSprite);
+			renderSprite((mouseTileX*16), (mouseTileY * 16), Sprite.selectSprite, true);
 			break;
 		case LINE:
 			if(isDragging) {
@@ -99,7 +99,7 @@ public class Screen {
 							ty = dragY + y;
 						else if(dragY > mouseTileY)
 							ty = dragY - y;
-						renderSprite((tx*16) - (int)xOffset, (ty * 16) - (int)yOffset, Sprite.selectSprite);
+						renderSprite((tx*16), (ty * 16), Sprite.selectSprite, true);
 						
 					}
 				}else {
@@ -109,11 +109,11 @@ public class Screen {
 							tx = dragX + x;
 						else if(dragX > mouseTileX)
 							tx = dragX - x;
-						renderSprite((tx*16) - (int)xOffset, (ty * 16) - (int)yOffset, Sprite.selectSprite);
+						renderSprite((tx*16), (ty * 16), Sprite.selectSprite, true);
 					}
 				}
 			}else {
-				renderSprite((mouseTileX*16) - (int)xOffset, (mouseTileY * 16) - (int)yOffset, Sprite.selectSprite);
+				renderSprite((mouseTileX*16), (mouseTileY * 16), Sprite.selectSprite, true);
 			}
 			break;
 		case FILL:
@@ -129,18 +129,25 @@ public class Screen {
 							ty = dragY + y;
 						else if(dragY > mouseTileY)
 							ty = dragY - y;
-						renderSprite((tx*16) - (int)xOffset, (ty * 16) - (int)yOffset, Sprite.selectSprite);
+						renderSprite((tx*16), (ty * 16), Sprite.selectSprite, true);
 						
 					}
 				}
 			}else {
-				renderSprite((mouseTileX*16) - (int)xOffset, (mouseTileY * 16) - (int)yOffset, Sprite.selectSprite);
+				renderSprite((mouseTileX*16), (mouseTileY * 16), Sprite.selectSprite, true);
 			}
 			break;
 		}
 	}
 	
-	public void renderSprite(int x, int y, Sprite sprite) {
+	public void renderSprite(int x, int y, Sprite sprite, boolean fixed) {
+		if(fixed) {
+			x -= (int)xOffset;
+			y -= (int)yOffset;
+		}
+		if(x < -sprite.SIZE || x >= width || y < -sprite.SIZE || y >= height)
+			return;
+		
 		for(int sx = 0; sx < 16; sx++) {
 			for(int sy =0; sy < 16; sy++) {
 				int screenX = ((x) )+sx;

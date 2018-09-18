@@ -17,8 +17,7 @@ public class Level {
 	
 	public final Tile[] tileMap = {
 			Tile.grass,
-			Tile.wood,
-			Tile.water
+			Tile.dirt
 	};
 	
 	public Level(int width, int height) {
@@ -36,11 +35,7 @@ public class Level {
 		for(int x = 0; x < width; x++) {
 			for(int y = 0; y < height; y++) {
 				int tileIndex = x + y * width;
-				int screenX =  ((x * 16) - (int)screen.xOffset);
-				int screenY =  ((y * 16) - (int)screen.yOffset);
-				if(screenX < -16 || screenX >= screen.width || screenY < -16 || screenY >= screen.height)
-					continue;
-				tiles[tileIndex].render(screenX, screenY, screen);
+				tiles[tileIndex].render(x * 16, y * 16, screen);
 			}
 		}
 		

@@ -2,7 +2,8 @@ package com.bluegrass.carcerem.graphics;
 
 public class Sprite {
 	
-	public static Sprite grass = new Sprite(16, 0, 0, SpriteSheet.sheet);
+	public static Sprite grass = new Sprite(16, 5, 0, SpriteSheet.sheet);
+	public static Sprite dirt = new Sprite(16, 6, 0, SpriteSheet.sheet);
 	public static Sprite wood = new Sprite(16, 1, 0, SpriteSheet.sheet);
 	public static Sprite water = new Sprite(16, 2, 0, SpriteSheet.sheet);
 	public static Sprite selectSprite = new Sprite(16, 3, 0, SpriteSheet.sheet);
