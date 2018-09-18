@@ -21,18 +21,12 @@ public class Level {
 	
 	public double xOffset, yOffset;
 	
-	public final Tile[] tileMap = {
-			Tile.grass,
-			Tile.dirt
-	};
-	
 	public Level(int width, int height) {
 		this.width = width;
 		this.height = height;
 		this.tiles = new Tile[width*height];
-		Random rand = new Random();
 		for(int i = 0; i < tiles.length; i++) {
-			tiles[i] = tileMap[rand.nextInt(tileMap.length)];
+			tiles[i] = Tile.dirt;
 		}
 		entities.add(new ConstructionWorker(this, 0, 4 * 16));
 		entities.add(new UserInterface(this));
