@@ -16,23 +16,29 @@ public abstract class Mob extends Entity {
 	protected boolean moving = false;
 	
 	public void move(double xDist, double yDist) {
-		int xpos = (int)(x + xDist);
-		int ypos = (int)(y + xDist);
-		for(int x = 0; x < 2; x++) {
-			for(int y = 0; y < 2; y++) {
-				if(level.tiles[((xpos+(16*x)) / 16) + ((ypos+(16*y)) / 16) * level.width].isSolid()) {
-					return;
-				}
-			}
+		if(!collision(xDist, 0)) {
+			this.x += xDist;
 		}
-		this.x += xDist;
-		this.y += yDist;
+		if(!collision(0, yDist)) {
+			this.y += yDist;
+		}
 	}
 	
 	public void update(double deltaTime) {
 	}
 	
-	private boolean collision() {
+	private boolean collision(double Xa, double Ya) {
+		int xpos = (int)(x + Xa);
+		int ypos = (int)(y + Ya);
+		for(int x = -1; x < 2; x += 2) {
+			for(int y = -1; y < 2; y += 2) {
+				int cornerTileX = (xpos+(8*x)) / 16;
+				int cornerTileY = (ypos+(8*y)) / 16;
+				if(level.getTile(cornerTileX, cornerTileY) != null && level.getTile(cornerTileX, cornerTileY).isSolid()) {
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 	

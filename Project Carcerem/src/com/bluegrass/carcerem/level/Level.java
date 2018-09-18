@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.bluegrass.carcerem.entity.Entity;
+import com.bluegrass.carcerem.entity.UserInterface;
 import com.bluegrass.carcerem.entity.mob.ConstructionWorker;
 import com.bluegrass.carcerem.graphics.Screen;
 
@@ -11,9 +12,14 @@ public class Level {
 	
 	public int width;
 	public int height;
-	public Tile[] tiles;
+	private Tile[] tiles;
 	
 	public ArrayList<Entity> entities = new ArrayList<Entity>();
+	
+	public int xTarget;
+	public int yTarget;
+	
+	public double xOffset, yOffset;
 	
 	public final Tile[] tileMap = {
 			Tile.grass,
@@ -29,6 +35,7 @@ public class Level {
 			tiles[i] = tileMap[rand.nextInt(tileMap.length)];
 		}
 		entities.add(new ConstructionWorker(this, 0, 4 * 16));
+		entities.add(new UserInterface(this));
 	}
 	
 	public void render(Screen screen) {
@@ -42,6 +49,12 @@ public class Level {
 		for(Entity e : entities) {
 			e.render(screen);
 		}
+	}
+	
+	public Tile getTile(int x, int y) {
+		if(x < 0 || x >= width || y < 0 || y >= height)
+			return null;
+		return tiles[x + y * width];
 	}
 	
 	public void update(double deltaTime) {

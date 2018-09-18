@@ -24,12 +24,6 @@ public class Screen {
 	
 	private Game game;
 	
-	public double xOffset, yOffset;
-	public int mouseTileX, mouseTileY;
-	
-	public int dragX, dragY;
-	public boolean isDragging = false;
-	
 	public Screen(int width, int height, Game game) {
 		this.width = width;
 		this.height = height;
@@ -83,67 +77,12 @@ public class Screen {
 
 	public void render() {
 		level.render(this);
-		
-		switch(game.mode) {
-		case SELECT:
-			break;
-		case SINGLE:
-			renderSprite((mouseTileX*16), (mouseTileY * 16), Sprite.selectSprite, true);
-			break;
-		case LINE:
-			if(isDragging) {
-				if(Math.abs(dragY - mouseTileY) > Math.abs(dragX - mouseTileX)) {
-					for(int y = 0; y <= Math.abs(dragY - mouseTileY); y++) {
-						int tx = dragX, ty = dragY;
-						if(dragY < mouseTileY)
-							ty = dragY + y;
-						else if(dragY > mouseTileY)
-							ty = dragY - y;
-						renderSprite((tx*16), (ty * 16), Sprite.selectSprite, true);
-						
-					}
-				}else {
-					for(int x = 0; x <= Math.abs(dragX-mouseTileX); x++) {
-						int tx = dragX, ty = dragY;
-						if(dragX < mouseTileX)
-							tx = dragX + x;
-						else if(dragX > mouseTileX)
-							tx = dragX - x;
-						renderSprite((tx*16), (ty * 16), Sprite.selectSprite, true);
-					}
-				}
-			}else {
-				renderSprite((mouseTileX*16), (mouseTileY * 16), Sprite.selectSprite, true);
-			}
-			break;
-		case FILL:
-			if(isDragging) {
-				for(int x = 0; x <= Math.abs(dragX-mouseTileX); x++) {
-					for(int y = 0; y <= Math.abs(dragY - mouseTileY); y++) {
-						int tx = dragX, ty = dragY;
-						if(dragX < mouseTileX)
-							tx = dragX + x;
-						else if(dragX > mouseTileX)
-							tx = dragX - x;
-						if(dragY < mouseTileY)
-							ty = dragY + y;
-						else if(dragY > mouseTileY)
-							ty = dragY - y;
-						renderSprite((tx*16), (ty * 16), Sprite.selectSprite, true);
-						
-					}
-				}
-			}else {
-				renderSprite((mouseTileX*16), (mouseTileY * 16), Sprite.selectSprite, true);
-			}
-			break;
-		}
 	}
 	
 	public void renderSprite(int x, int y, Sprite sprite, boolean fixed) {
 		if(fixed) {
-			x -= (int)xOffset;
-			y -= (int)yOffset;
+			x -= (int)level.xOffset;
+			y -= (int)level.yOffset;
 		}
 		if(x < -sprite.SIZE || x >= width || y < -sprite.SIZE || y >= height)
 			return;

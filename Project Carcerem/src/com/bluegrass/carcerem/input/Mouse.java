@@ -5,17 +5,10 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 public class Mouse implements MouseMotionListener, MouseListener{
-	
-	public enum MouseMode{
-		SELECT,
-		SINGLE,
-		LINE,
-		FILL
-	}
 
 	
-	private boolean buttons[] = new boolean[5];
-	private int x, y;
+	private static boolean buttons[] = new boolean[5];
+	private static int x, y;
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -54,21 +47,21 @@ public class Mouse implements MouseMotionListener, MouseListener{
 		y = e.getY();
 	}
 	
-	public boolean getButton(int button) {
+	public static boolean getButton(int button) {
 		boolean temp = buttons[button];
 		buttons[button] = false;
 		return temp;
 	}
 	
-	public boolean getButtonDown(int button) {
+	public static boolean getButtonDown(int button) {
 		return buttons[button];
 	}
 	
-	public int getX() {
+	public static int getX() {
 		return x;
 	}
 	
-	public int getY() {
+	public static int getY() {
 		return y;
 	}
 }

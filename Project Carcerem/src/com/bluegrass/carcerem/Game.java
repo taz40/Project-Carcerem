@@ -11,12 +11,8 @@ import java.awt.image.DataBufferInt;
 import javax.swing.JFrame;
 
 import com.bluegrass.carcerem.graphics.Screen;
-import com.bluegrass.carcerem.graphics.Sprite;
 import com.bluegrass.carcerem.input.Keyboard;
 import com.bluegrass.carcerem.input.Mouse;
-import com.bluegrass.carcerem.input.Mouse.MouseMode;
-import com.bluegrass.carcerem.level.Level;
-import com.bluegrass.carcerem.level.Tile;
 
 //The Main class
 public class Game extends Canvas implements Runnable {
@@ -35,7 +31,7 @@ public class Game extends Canvas implements Runnable {
 	//The Window
 	private JFrame frame;
 	//The Screen(renderer)
-	private Screen screen;
+	public Screen screen;
 	
 	//The Image and pixels to be rendered to the screen
 	private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -47,9 +43,6 @@ public class Game extends Canvas implements Runnable {
 	
 	//The title of the window
 	public static final String TITLE = "Project Carcerem";
-	
-	//The current mouse mode
-	public MouseMode mode = MouseMode.SELECT;
 	
 	//main method
 	public static void main(String[] args) {
@@ -162,109 +155,14 @@ public class Game extends Canvas implements Runnable {
 	private void update(double deltaTime) {
 		screen.level.update(deltaTime);
 		//check for movement
-		if(keyboard.getKeyDown(KeyEvent.VK_W) || keyboard.getKeyDown(KeyEvent.VK_UP))
-			screen.yOffset -= 64.0 * deltaTime;
-		if(keyboard.getKeyDown(KeyEvent.VK_S) || keyboard.getKeyDown(KeyEvent.VK_DOWN))
-			screen.yOffset += 64.0 * deltaTime;
-		if(keyboard.getKeyDown(KeyEvent.VK_D) || keyboard.getKeyDown(KeyEvent.VK_RIGHT))
-			screen.xOffset += 64.0 * deltaTime;
-		if(keyboard.getKeyDown(KeyEvent.VK_A) || keyboard.getKeyDown(KeyEvent.VK_LEFT))
-			screen.xOffset -= 64.0 * deltaTime;
-		
-		//find the tile the mouse is hovering over
-		screen.mouseTileX = (int) Math.floor(((mouse.getX() / scale) + screen.xOffset) / 16);
-		screen.mouseTileY = (int) Math.floor(((mouse.getY() / scale) + screen.yOffset) / 16);
-		
-		//switch between modes if the ESC key is pressed
-		if(keyboard.getKey(KeyEvent.VK_ESCAPE)) {
-			switch(mode) {
-			case SELECT:
-				mode = MouseMode.SINGLE;
-				break;
-			case SINGLE:
-				mode = MouseMode.LINE;
-				break;
-			case LINE:
-				mode = MouseMode.FILL;
-				break;
-			default:
-				mode = MouseMode.SELECT;
-				break;
-			}
-		}
-		
-		//change tiles based on mode
-		switch(mode) {
-		case SELECT:
-			break;
-		case SINGLE:
-			if(mouse.getButtonDown(1)) {
-				screen.level.setTile(screen.mouseTileX, screen.mouseTileY, Tile.wood);
-			}
-			break;
-		case LINE:
-			if(mouse.getButtonDown(1)) {
-				if(!screen.isDragging) {
-					screen.isDragging = true;
-					screen.dragX = (int) Math.floor(((mouse.getX() / scale) + screen.xOffset) / 16);
-					screen.dragY = (int) Math.floor(((mouse.getY() / scale) + screen.yOffset) / 16);
-				}
-			}else {
-				if(screen.isDragging) {
-					screen.isDragging = false;
-					if(Math.abs(screen.dragY - screen.mouseTileY) > Math.abs(screen.dragX - screen.mouseTileX)) {
-						for(int y = 0; y <= Math.abs(screen.dragY - screen.mouseTileY); y++) {
-							int tx = screen.dragX, ty = screen.dragY;
-							if(screen.dragY < screen.mouseTileY)
-								ty = screen.dragY + y;
-							else if(screen.dragY > screen.mouseTileY)
-								ty = screen.dragY - y;
-							screen.level.setTile(tx, ty, Tile.wood);
-							
-						}
-					}else {
-						for(int x = 0; x <= Math.abs(screen.dragX-screen.mouseTileX); x++) {
-							int tx = screen.dragX, ty = screen.dragY;
-							if(screen.dragX < screen.mouseTileX)
-								tx = screen.dragX + x;
-							else if(screen.dragX > screen.mouseTileX)
-								tx = screen.dragX - x;
-							screen.level.setTile(tx, ty, Tile.wood);
-						}
-					}
-				}
-			}
-			break;
-		case FILL:
-			if(mouse.getButtonDown(1)) {
-				if(!screen.isDragging) {
-					screen.isDragging = true;
-					screen.dragX = (int) Math.floor(((mouse.getX() / scale) + screen.xOffset) / 16);
-					screen.dragY = (int) Math.floor(((mouse.getY() / scale) + screen.yOffset) / 16);
-				}
-			}else {
-				if(screen.isDragging) {
-					screen.isDragging = false;
-					for(int x = 0; x <= Math.abs(screen.dragX-screen.mouseTileX); x++) {
-						for(int y = 0; y <= Math.abs(screen.dragY - screen.mouseTileY); y++) {
-							int tx = screen.dragX, ty = screen.dragY;
-							if(screen.dragX < screen.mouseTileX)
-								tx = screen.dragX + x;
-							else if(screen.dragX > screen.mouseTileX)
-								tx = screen.dragX - x;
-							if(screen.dragY < screen.mouseTileY)
-								ty = screen.dragY + y;
-							else if(screen.dragY > screen.mouseTileY)
-								ty = screen.dragY - y;
-							screen.level.setTile(tx, ty, Tile.wood);
-							
-						}
-					}
-				}
-			}
-			break;
-		}
-		
+		if(Keyboard.getKeyDown(KeyEvent.VK_W) || Keyboard.getKeyDown(KeyEvent.VK_UP))
+			screen.level.yOffset -= 64.0 * deltaTime;
+		if(Keyboard.getKeyDown(KeyEvent.VK_S) || Keyboard.getKeyDown(KeyEvent.VK_DOWN))
+			screen.level.yOffset += 64.0 * deltaTime;
+		if(Keyboard.getKeyDown(KeyEvent.VK_D) || Keyboard.getKeyDown(KeyEvent.VK_RIGHT))
+			screen.level.xOffset += 64.0 * deltaTime;
+		if(Keyboard.getKeyDown(KeyEvent.VK_A) || Keyboard.getKeyDown(KeyEvent.VK_LEFT))
+			screen.level.xOffset -= 64.0 * deltaTime;
 		
 	}
 
