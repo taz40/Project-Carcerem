@@ -18,7 +18,7 @@ public class Screen {
 			Sprite.water
 	};
 	
-	public static float zoom = 3;
+	public static double zoom = 1.5;
 	
 	private Random random = new Random();
 	
@@ -100,7 +100,7 @@ public class Screen {
 					for(int yp = 0; yp < zoom; yp++) {
 						if(screenX*zoom+xp < 0 || screenX*zoom+xp >= width || screenY*zoom+yp < 0 || screenY*zoom+yp >= height)
 							continue;
-						setPixel((int)(screenX*zoom+xp), (int)(screenY*zoom+yp), c);
+						setPixel((int)(screenX*zoom)+xp, (int)(screenY*zoom)+yp, c);
 					}
 				}
 			}

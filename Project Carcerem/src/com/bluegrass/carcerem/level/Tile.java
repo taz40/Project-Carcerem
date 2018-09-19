@@ -13,6 +13,7 @@ public class Tile {
 	public boolean isSolid = false;
 	
 	public Sprite sprite;
+	public TileObject object;
 	
 	public Tile(Sprite sprite) {
 		this(sprite, false);
@@ -25,10 +26,17 @@ public class Tile {
 	
 	public void render(int x, int y, Screen screen) {
 		screen.renderSprite(x, y, sprite, true);
+		if(object != null)
+			object.render(x, y, screen);
 	}
 	
 	public boolean isSolid() {
 		return isSolid;
+	}
+	
+	public Tile clone() {
+		Tile t = new Tile(sprite, isSolid);
+		return t;
 	}
 
 }

@@ -9,6 +9,7 @@ import com.bluegrass.carcerem.input.Keyboard;
 import com.bluegrass.carcerem.input.Mouse;
 import com.bluegrass.carcerem.level.Level;
 import com.bluegrass.carcerem.level.Tile;
+import com.bluegrass.carcerem.level.Wall;
 
 public class UserInterface extends Entity {
 	
@@ -120,7 +121,9 @@ public class UserInterface extends Entity {
 			break;
 		case SINGLE:
 			if(Mouse.getButtonDown(1)) {
-				level.setTile(mouseTileX, mouseTileY, Tile.wood);
+				//level.setTile(mouseTileX, mouseTileY, Tile.wood);
+				if(level.getTile(mouseTileX, mouseTileY) != null)
+					level.getTile(mouseTileX, mouseTileY).object = new Wall();
 			}
 			break;
 		case LINE:
@@ -140,7 +143,9 @@ public class UserInterface extends Entity {
 								ty = dragY + y;
 							else if(dragY > mouseTileY)
 								ty = dragY - y;
-							level.setTile(tx, ty, Tile.wood);
+							//level.setTile(tx, ty, Tile.wood);
+							if(level.getTile(tx, ty) != null)
+								level.getTile(tx, ty).object = new Wall();
 							
 						}
 					}else {
@@ -150,7 +155,9 @@ public class UserInterface extends Entity {
 								tx = dragX + x;
 							else if(dragX > mouseTileX)
 								tx = dragX - x;
-							level.setTile(tx, ty, Tile.wood);
+							//level.setTile(tx, ty, Tile.wood);
+							if(level.getTile(tx, ty) != null)
+								level.getTile(tx, ty).object = new Wall();
 						}
 					}
 				}
@@ -177,7 +184,9 @@ public class UserInterface extends Entity {
 								ty = dragY + y;
 							else if(dragY > mouseTileY)
 								ty = dragY - y;
-							level.setTile(tx, ty, Tile.wood);
+							//level.setTile(tx, ty, Tile.wood);
+							if(level.getTile(tx, ty) != null)
+								level.getTile(tx, ty).object = new Wall();
 							
 						}
 					}

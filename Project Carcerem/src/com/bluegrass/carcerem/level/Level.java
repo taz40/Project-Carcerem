@@ -14,7 +14,8 @@ public class Level {
 	public int height;
 	private Tile[] tiles;
 	
-	public ArrayList<Entity> entities = new ArrayList<Entity>();
+	private ArrayList<Entity> entities = new ArrayList<Entity>();
+	private ArrayList<Entity> entitesToAdd = new ArrayList<Entity>();
 	
 	public int xTarget;
 	public int yTarget;
@@ -26,7 +27,7 @@ public class Level {
 		this.height = height;
 		this.tiles = new Tile[width*height];
 		for(int i = 0; i < tiles.length; i++) {
-			tiles[i] = Tile.dirt;
+			tiles[i] = Tile.dirt.clone();
 		}
 		entities.add(new ConstructionWorker(this, 0, 4 * 16));
 		entities.add(new UserInterface(this));
@@ -52,6 +53,10 @@ public class Level {
 	}
 	
 	public void update(double deltaTime) {
+		while(!entitesToAdd.isEmpty()) {
+			entities.add(entitesToAdd.get(0));
+			entitesToAdd.remove(0);
+		}
 		for(Entity e : entities) {
 			e.update(deltaTime);
 		}
@@ -59,10 +64,14 @@ public class Level {
 		
 	}
 	
+	public void addEntity(Entity e) {
+		entitesToAdd.add(e);
+	}
+	
 	public void setTile(int x, int y, Tile tile) {
 		if(x < 0 || x >= width || y < 0 || y >= height)
 			return;
-		tiles[x + y * width] = tile;
+		tiles[x + y * width] = tile.clone();
 	}
 
 }
