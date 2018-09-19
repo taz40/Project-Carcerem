@@ -28,12 +28,12 @@ public abstract class Mob extends Entity {
 	}
 	
 	private boolean collision(double Xa, double Ya) {
-		int xpos = (int)(x + Xa);
-		int ypos = (int)(y + Ya);
+		int xpos = (int) Math.floor(x + Xa);
+		int ypos = (int) Math.floor(y + Ya);
 		for(int x = -1; x < 2; x += 2) {
 			for(int y = -1; y < 2; y += 2) {
-				int cornerTileX = (xpos+(8*x)) / 16;
-				int cornerTileY = (ypos+(8*y)) / 16;
+				int cornerTileX = (int) Math.floor((xpos+(8*x)) / 16);
+				int cornerTileY = (int) Math.floor((ypos+(8*y)) / 16);
 				if(level.getTile(cornerTileX, cornerTileY) != null && level.getTile(cornerTileX, cornerTileY).isSolid()) {
 					return true;
 				}

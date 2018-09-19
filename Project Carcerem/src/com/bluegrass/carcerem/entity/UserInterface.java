@@ -91,8 +91,8 @@ public class UserInterface extends Entity {
 	
 	public void update(double deltaTime) {
 		//find the tile the mouse is hovering over
-		mouseTileX = (int) Math.floor(((Mouse.getX() / Game.scale) + level.xOffset) / 16);
-		mouseTileY = (int) Math.floor(((Mouse.getY() / Game.scale) + level.yOffset) / 16);
+		mouseTileX = (int) Math.floor(((Mouse.getX() / Game.scale/Screen.zoom) + level.xOffset) / 16);
+		mouseTileY = (int) Math.floor(((Mouse.getY() / Game.scale/Screen.zoom) + level.yOffset) / 16);
 		
 		//switch between modes if the ESC key is pressed
 		if(Keyboard.getKey(KeyEvent.VK_ESCAPE)) {
@@ -115,8 +115,8 @@ public class UserInterface extends Entity {
 		//change tiles based on mode
 		switch(mode) {
 		case SELECT:
-			level.xTarget = (int) ((Mouse.getX()/Game.scale) + level.xOffset);
-			level.yTarget = (int) ((Mouse.getY()/Game.scale) + level.yOffset);
+			level.xTarget = (int) ((Mouse.getX()/Game.scale/Screen.zoom) + level.xOffset);
+			level.yTarget = (int) ((Mouse.getY()/Game.scale/Screen.zoom) + level.yOffset);
 			break;
 		case SINGLE:
 			if(Mouse.getButtonDown(1)) {
@@ -127,8 +127,8 @@ public class UserInterface extends Entity {
 			if(Mouse.getButtonDown(1)) {
 				if(!isDragging) {
 					isDragging = true;
-					dragX = (int) Math.floor(((Mouse.getX() / Game.scale) + level.xOffset) / 16);
-					dragY = (int) Math.floor(((Mouse.getY() / Game.scale) + level.yOffset) / 16);
+					dragX = (int) Math.floor(((Mouse.getX() / Game.scale/Screen.zoom) + level.xOffset) / 16);
+					dragY = (int) Math.floor(((Mouse.getY() / Game.scale/Screen.zoom) + level.yOffset) / 16);
 				}
 			}else {
 				if(isDragging) {
@@ -160,8 +160,8 @@ public class UserInterface extends Entity {
 			if(Mouse.getButtonDown(1)) {
 				if(!isDragging) {
 					isDragging = true;
-					dragX = (int) Math.floor(((Mouse.getX() / Game.scale) + level.xOffset) / 16);
-					dragY = (int) Math.floor(((Mouse.getY() / Game.scale) + level.yOffset) / 16);
+					dragX = (int) Math.floor(((Mouse.getX() / Game.scale/Screen.zoom) + level.xOffset) / 16);
+					dragY = (int) Math.floor(((Mouse.getY() / Game.scale/Screen.zoom) + level.yOffset) / 16);
 				}
 			}else {
 				if(isDragging) {

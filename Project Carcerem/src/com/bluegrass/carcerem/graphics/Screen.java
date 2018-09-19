@@ -18,6 +18,8 @@ public class Screen {
 			Sprite.water
 	};
 	
+	public static float zoom = 3;
+	
 	private Random random = new Random();
 	
 	public Level level = new Level(64, 64);
@@ -84,17 +86,23 @@ public class Screen {
 			x -= (int)level.xOffset;
 			y -= (int)level.yOffset;
 		}
-		if(x < -sprite.SIZE || x >= width || y < -sprite.SIZE || y >= height)
+		if(x < -sprite.SIZE*zoom || x >= width/zoom || y < -sprite.SIZE*zoom || y >= height/zoom)
 			return;
 		
 		for(int sx = 0; sx < 16; sx++) {
 			for(int sy =0; sy < 16; sy++) {
 				int screenX = ((x) )+sx;
 				int screenY = ((y) )+sy;
-				if(screenX < 0 || screenX >= width || screenY < 0 || screenY >= height)
-					continue;
+				//if(screenX < 3 || screenX >= width || screenY < 3 || screenY >= height)
+					//continue;
 				int c = sprite.pixels[sx + sy * 16];
-				setPixel(screenX, screenY, c);
+				for(int xp = 0; xp < zoom; xp++) {
+					for(int yp = 0; yp < zoom; yp++) {
+						if(screenX*zoom+xp < 0 || screenX*zoom+xp >= width || screenY*zoom+yp < 0 || screenY*zoom+yp >= height)
+							continue;
+						setPixel((int)(screenX*zoom+xp), (int)(screenY*zoom+yp), c);
+					}
+				}
 			}
 		}
 	}

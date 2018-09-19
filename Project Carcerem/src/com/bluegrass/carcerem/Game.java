@@ -19,10 +19,10 @@ public class Game extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 	
 	//Width and Height of the render area
-	public static int width = 300;
+	public static int width = 900;
 	public static int height = width / 16 * 9;
 	//Scale of the window, based on the render area
-	public static int scale = 3;
+	public static int scale = 1;
 	
 	//The game loop thread
 	private Thread thread;
@@ -163,6 +163,11 @@ public class Game extends Canvas implements Runnable {
 			screen.level.xOffset += 64.0 * deltaTime;
 		if(Keyboard.getKeyDown(KeyEvent.VK_A) || Keyboard.getKeyDown(KeyEvent.VK_LEFT))
 			screen.level.xOffset -= 64.0 * deltaTime;
+		
+		if(keyboard.getKeyDown(KeyEvent.VK_Q)) screen.zoom += deltaTime;
+		if(keyboard.getKeyDown(KeyEvent.VK_E)) screen.zoom -= deltaTime;
+		if(screen.zoom < 1) screen.zoom = 1;
+		if(screen.zoom > 4) screen.zoom = 4;
 		
 	}
 
