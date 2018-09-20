@@ -175,7 +175,7 @@ public class Game extends Canvas implements Runnable {
 	private void update(double deltaTime) {
 		screen.level.update(deltaTime);
 		
-		if(dragging) {
+		if(dragging && mouse.getX() >= 0 && mouse.getY() >= 0) {
 			screen.level.xOffset -= (mouse.getX() - dragXLast) / Screen.zoom;
 			screen.level.yOffset -= (mouse.getY() - dragYLast) / Screen.zoom;
 			dragXLast = mouse.getX();

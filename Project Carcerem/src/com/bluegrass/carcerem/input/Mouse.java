@@ -43,16 +43,12 @@ public class Mouse implements MouseMotionListener, MouseListener, MouseWheelList
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if(!(e.getX() > bounds.x && e.getX() <= bounds.width && e.getY() > bounds.y && e.getY() <= bounds.height))
-			return;
 		buttons[e.getButton()] = false;
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		if(!(e.getX() > bounds.x && e.getX() <= bounds.width && e.getY() > bounds.y && e.getY() <= bounds.height)) {
-			x = -100;
-			y = -100;
 			return;
 		}
 		x = e.getX();
@@ -62,8 +58,6 @@ public class Mouse implements MouseMotionListener, MouseListener, MouseWheelList
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		if(!(e.getX() > bounds.x && e.getX() <= bounds.width && e.getY() > bounds.y && e.getY() <= bounds.height)) {
-			x = -100;
-			y = -100;
 			return;
 		}
 		x = e.getX();

@@ -1,5 +1,6 @@
 package com.bluegrass.carcerem.graphics;
 
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
 import com.bluegrass.carcerem.Game;
@@ -88,7 +89,7 @@ public class Screen {
 		}
 		if(x < -sprite.SIZE*zoom || x >= width/zoom || y < -sprite.SIZE*zoom || y >= height/zoom)
 			return;
-		
+				
 		for(int sx = 0; sx < 16; sx++) {
 			for(int sy =0; sy < 16; sy++) {
 				int screenX = ((x) )+sx;
@@ -100,7 +101,7 @@ public class Screen {
 					for(int yp = 0; yp < zoom; yp++) {
 						if(screenX*zoom+xp < 0 || screenX*zoom+xp >= width || screenY*zoom+yp < 0 || screenY*zoom+yp >= height)
 							continue;
-						setPixel((int)(screenX*zoom)+xp, (int)(screenY*zoom)+yp, c);
+						setPixel((int)Math.floor(screenX*zoom+xp), (int) Math.floor(screenY*zoom+yp), c);
 					}
 				}
 			}
