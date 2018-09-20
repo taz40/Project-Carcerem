@@ -45,6 +45,10 @@ public class Game extends Canvas implements Runnable {
 	public Keyboard keyboard = new Keyboard();
 	public Mouse mouse = new Mouse();
 	
+	private int dragXLast;
+	private int dragYLast;
+	private boolean dragging = false;
+	
 	//The title of the window
 	public static final String TITLE = "Project Carcerem";
 	
@@ -162,6 +166,23 @@ public class Game extends Canvas implements Runnable {
 	//update the game
 	private void update(double deltaTime) {
 		screen.level.update(deltaTime);
+		
+		if(dragging) {
+			screen.level.xOffset -= (Mouse.getX() - dragXLast) / Screen.zoom;
+			screen.level.yOffset -= (Mouse.getY() - dragYLast) / Screen.zoom;
+			dragXLast = Mouse.getX();
+			dragYLast = Mouse.getY();
+			if(!Mouse.getButtonDown(2)) {
+				dragging = false;
+			}
+		}else {
+			if(Mouse.getButtonDown(2)) {
+				dragging = true;
+				dragXLast = Mouse.getX();
+				dragYLast = Mouse.getY();
+			}
+		}
+		
 		//check for movement
 		if(Keyboard.getKeyDown(KeyEvent.VK_W) || Keyboard.getKeyDown(KeyEvent.VK_UP))
 			screen.level.yOffset -= 64.0 * deltaTime;
@@ -180,8 +201,8 @@ public class Game extends Canvas implements Runnable {
 			screen.zoom = 1;
 			zoomChange = 0;
 		} 
-		if(screen.zoom > 2) {
-			screen.zoom = 2;
+		if(screen.zoom > 4) {
+			screen.zoom = 4;
 			zoomChange = 0;
 		} 
 		if(zoomChange != 0) {
