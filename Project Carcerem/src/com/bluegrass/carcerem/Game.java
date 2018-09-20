@@ -1,6 +1,7 @@
 package com.bluegrass.carcerem;
 
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
@@ -21,6 +22,9 @@ public class Game extends Canvas implements Runnable {
 	//Width and Height of the render area
 	public static int width = 900;
 	public static int height = width / 16 * 9;
+	
+	public static int uiWidth = 200;
+	
 	//Scale of the window, based on the render area
 	public static int scale = 1;
 	
@@ -60,6 +64,8 @@ public class Game extends Canvas implements Runnable {
 		game.addKeyListener(game.keyboard);
 		game.addMouseListener(game.mouse);
 		game.addMouseMotionListener(game.mouse);
+		game.addMouseWheelListener(game.mouse);
+		
 		//start the game
 		game.start();
 	}
@@ -147,6 +153,8 @@ public class Game extends Canvas implements Runnable {
 		//draw the image
 		Graphics g = bs.getDrawGraphics();
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), 0, 0, width, height, null);
+		g.setColor(new Color(255,255,255,128));
+		g.fillRect(width-uiWidth, 0, uiWidth, height);
 		g.dispose();
 		bs.show();
 	}
@@ -164,10 +172,25 @@ public class Game extends Canvas implements Runnable {
 		if(Keyboard.getKeyDown(KeyEvent.VK_A) || Keyboard.getKeyDown(KeyEvent.VK_LEFT))
 			screen.level.xOffset -= 64.0 * deltaTime;
 		
-		if(keyboard.getKeyDown(KeyEvent.VK_Q)) screen.zoom += deltaTime;
-		if(keyboard.getKeyDown(KeyEvent.VK_E)) screen.zoom -= deltaTime;
-		if(screen.zoom < 1) screen.zoom = 1;
-		if(screen.zoom > 4) screen.zoom = 4;
+		double zoomChange = Mouse.getLastWheelRotation() * .1 * Screen.zoom;
+		//double zoomChange = Mouse.getLastWheelRotation() >= 1 ? 1 : 0;
+		double oldZoom = Screen.zoom;
+		Screen.zoom -= zoomChange;
+		if(screen.zoom < 1) {
+			screen.zoom = 1;
+			zoomChange = 0;
+		} 
+		if(screen.zoom > 2) {
+			screen.zoom = 2;
+			zoomChange = 0;
+		} 
+		if(zoomChange != 0) {
+			int centerX = (int) (screen.level.xOffset + width / oldZoom / 2);
+			int centerY = (int) (screen.level.yOffset + height / oldZoom / 2);
+			screen.level.xOffset = -(width /Screen.zoom/2) + centerX;
+			screen.level.yOffset = -(height /Screen.zoom/2) + centerY;
+		}
+
 		
 	}
 

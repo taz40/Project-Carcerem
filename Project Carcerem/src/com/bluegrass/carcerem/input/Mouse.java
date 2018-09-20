@@ -3,12 +3,15 @@ package com.bluegrass.carcerem.input;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
-public class Mouse implements MouseMotionListener, MouseListener{
+public class Mouse implements MouseMotionListener, MouseListener, MouseWheelListener{
 
 	
 	private static boolean buttons[] = new boolean[5];
 	private static int x, y;
+	private static int wheelRotation;
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -63,5 +66,15 @@ public class Mouse implements MouseMotionListener, MouseListener{
 	
 	public static int getY() {
 		return y;
+	}
+
+	public static int getLastWheelRotation() {
+		int temp = wheelRotation;
+		wheelRotation = 0;
+		return temp;
+	}
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		wheelRotation = e.getWheelRotation();
 	}
 }
