@@ -4,6 +4,7 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -14,6 +15,7 @@ import javax.swing.JFrame;
 import com.bluegrass.carcerem.graphics.Screen;
 import com.bluegrass.carcerem.input.Keyboard;
 import com.bluegrass.carcerem.input.Mouse;
+import com.bluegrass.carcerem.menu.Menu;
 
 //The Main class
 public class Game extends Canvas implements Runnable {
@@ -43,11 +45,14 @@ public class Game extends Canvas implements Runnable {
 	
 	//input listeners
 	public Keyboard keyboard = new Keyboard();
-	public Mouse mouse = new Mouse();
+	public static Mouse mouse = new Mouse(new Rectangle(0, 0, width - uiWidth, height));
+	public static Mouse uiMouse = new Mouse(new Rectangle(width-uiWidth, 0, uiWidth, height));
 	
 	private int dragXLast;
 	private int dragYLast;
 	private boolean dragging = false;
+	
+	private Menu menu = new Menu();
 	
 	//The title of the window
 	public static final String TITLE = "Project Carcerem";
@@ -69,6 +74,9 @@ public class Game extends Canvas implements Runnable {
 		game.addMouseListener(game.mouse);
 		game.addMouseMotionListener(game.mouse);
 		game.addMouseWheelListener(game.mouse);
+		game.addMouseListener(game.uiMouse);
+		game.addMouseMotionListener(game.uiMouse);
+		game.addMouseWheelListener(game.uiMouse);
 		
 		//start the game
 		game.start();
@@ -158,7 +166,7 @@ public class Game extends Canvas implements Runnable {
 		Graphics g = bs.getDrawGraphics();
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), 0, 0, width, height, null);
 		g.setColor(new Color(255,255,255,128));
-		g.fillRect(width-uiWidth, 0, uiWidth, height);
+		menu.render(g);
 		g.dispose();
 		bs.show();
 	}
@@ -168,18 +176,18 @@ public class Game extends Canvas implements Runnable {
 		screen.level.update(deltaTime);
 		
 		if(dragging) {
-			screen.level.xOffset -= (Mouse.getX() - dragXLast) / Screen.zoom;
-			screen.level.yOffset -= (Mouse.getY() - dragYLast) / Screen.zoom;
-			dragXLast = Mouse.getX();
-			dragYLast = Mouse.getY();
-			if(!Mouse.getButtonDown(2)) {
+			screen.level.xOffset -= (mouse.getX() - dragXLast) / Screen.zoom;
+			screen.level.yOffset -= (mouse.getY() - dragYLast) / Screen.zoom;
+			dragXLast = mouse.getX();
+			dragYLast = mouse.getY();
+			if(!mouse.getButtonDown(2)) {
 				dragging = false;
 			}
 		}else {
-			if(Mouse.getButtonDown(2)) {
+			if(mouse.getButtonDown(2)) {
 				dragging = true;
-				dragXLast = Mouse.getX();
-				dragYLast = Mouse.getY();
+				dragXLast = mouse.getX();
+				dragYLast = mouse.getY();
 			}
 		}
 		
@@ -193,7 +201,7 @@ public class Game extends Canvas implements Runnable {
 		if(Keyboard.getKeyDown(KeyEvent.VK_A) || Keyboard.getKeyDown(KeyEvent.VK_LEFT))
 			screen.level.xOffset -= 64.0 * deltaTime;
 		
-		double zoomChange = Mouse.getLastWheelRotation() * .1 * Screen.zoom;
+		double zoomChange = mouse.getLastWheelRotation() * .1 * Screen.zoom;
 		//double zoomChange = Mouse.getLastWheelRotation() >= 1 ? 1 : 0;
 		double oldZoom = Screen.zoom;
 		Screen.zoom -= zoomChange;
@@ -211,7 +219,7 @@ public class Game extends Canvas implements Runnable {
 			screen.level.xOffset = -(width /Screen.zoom/2) + centerX;
 			screen.level.yOffset = -(height /Screen.zoom/2) + centerY;
 		}
-
+		menu.update(deltaTime);
 		
 	}
 

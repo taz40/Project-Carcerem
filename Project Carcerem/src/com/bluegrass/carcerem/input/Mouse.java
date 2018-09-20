@@ -1,5 +1,6 @@
 package com.bluegrass.carcerem.input;
 
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -9,9 +10,14 @@ import java.awt.event.MouseWheelListener;
 public class Mouse implements MouseMotionListener, MouseListener, MouseWheelListener{
 
 	
-	private static boolean buttons[] = new boolean[5];
-	private static int x, y;
-	private static int wheelRotation;
+	private boolean buttons[] = new boolean[5];
+	private int x, y;
+	private int wheelRotation;
+	private Rectangle bounds;
+	
+	public Mouse(Rectangle bounds) {
+		this.bounds = bounds;
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -30,51 +36,68 @@ public class Mouse implements MouseMotionListener, MouseListener, MouseWheelList
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		if(!(e.getX() > bounds.x && e.getX() <= bounds.width+bounds.x && e.getY() > bounds.y && e.getY() <= bounds.height+bounds.y))
+			return;
 		buttons[e.getButton()] = true;
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		if(!(e.getX() > bounds.x && e.getX() <= bounds.width && e.getY() > bounds.y && e.getY() <= bounds.height))
+			return;
 		buttons[e.getButton()] = false;
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
+		if(!(e.getX() > bounds.x && e.getX() <= bounds.width && e.getY() > bounds.y && e.getY() <= bounds.height)) {
+			x = -100;
+			y = -100;
+			return;
+		}
 		x = e.getX();
 		y = e.getY();
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		if(!(e.getX() > bounds.x && e.getX() <= bounds.width && e.getY() > bounds.y && e.getY() <= bounds.height)) {
+			x = -100;
+			y = -100;
+			return;
+		}
 		x = e.getX();
 		y = e.getY();
 	}
 	
-	public static boolean getButton(int button) {
+	public boolean getButton(int button) {
 		boolean temp = buttons[button];
 		buttons[button] = false;
 		return temp;
 	}
 	
-	public static boolean getButtonDown(int button) {
+	public boolean getButtonDown(int button) {
 		return buttons[button];
 	}
 	
-	public static int getX() {
+	public int getX() {
 		return x;
 	}
 	
-	public static int getY() {
+	public int getY() {
 		return y;
 	}
 
-	public static int getLastWheelRotation() {
+	public int getLastWheelRotation() {
 		int temp = wheelRotation;
 		wheelRotation = 0;
 		return temp;
 	}
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
+		if(!(e.getX() > bounds.x && e.getX() <= bounds.width && e.getY() > bounds.y && e.getY() <= bounds.height)) {
+			return;
+		}
 		wheelRotation = e.getWheelRotation();
 	}
 }

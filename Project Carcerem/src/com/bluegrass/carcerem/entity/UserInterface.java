@@ -92,8 +92,8 @@ public class UserInterface extends Entity {
 	
 	public void update(double deltaTime) {
 		//find the tile the mouse is hovering over
-		mouseTileX = (int) Math.floor(((Mouse.getX() / Game.scale/Screen.zoom) + level.xOffset) / 16);
-		mouseTileY = (int) Math.floor(((Mouse.getY() / Game.scale/Screen.zoom) + level.yOffset) / 16);
+		mouseTileX = (int) Math.floor(((Game.mouse.getX() / Game.scale/Screen.zoom) + level.xOffset) / 16);
+		mouseTileY = (int) Math.floor(((Game.mouse.getY() / Game.scale/Screen.zoom) + level.yOffset) / 16);
 		
 		//switch between modes if the ESC key is pressed
 		if(Keyboard.getKey(KeyEvent.VK_ESCAPE)) {
@@ -116,22 +116,24 @@ public class UserInterface extends Entity {
 		//change tiles based on mode
 		switch(mode) {
 		case SELECT:
-			level.xTarget = (int) ((Mouse.getX()/Game.scale/Screen.zoom) + level.xOffset);
-			level.yTarget = (int) ((Mouse.getY()/Game.scale/Screen.zoom) + level.yOffset);
+			if(Game.mouse.getX() >= 0 && Game.mouse.getY() >= 0) {
+				level.xTarget = (int) ((Game.mouse.getX()/Game.scale/Screen.zoom) + level.xOffset);
+				level.yTarget = (int) ((Game.mouse.getY()/Game.scale/Screen.zoom) + level.yOffset);
+			}
 			break;
 		case SINGLE:
-			if(Mouse.getButtonDown(1)) {
+			if(Game.mouse.getButtonDown(1)) {
 				//level.setTile(mouseTileX, mouseTileY, Tile.wood);
 				if(level.getTile(mouseTileX, mouseTileY) != null)
 					level.getTile(mouseTileX, mouseTileY).object = new Wall();
 			}
 			break;
 		case LINE:
-			if(Mouse.getButtonDown(1)) {
+			if(Game.mouse.getButtonDown(1)) {
 				if(!isDragging) {
 					isDragging = true;
-					dragX = (int) Math.floor(((Mouse.getX() / Game.scale/Screen.zoom) + level.xOffset) / 16);
-					dragY = (int) Math.floor(((Mouse.getY() / Game.scale/Screen.zoom) + level.yOffset) / 16);
+					dragX = (int) Math.floor(((Game.mouse.getX() / Game.scale/Screen.zoom) + level.xOffset) / 16);
+					dragY = (int) Math.floor(((Game.mouse.getY() / Game.scale/Screen.zoom) + level.yOffset) / 16);
 				}
 			}else {
 				if(isDragging) {
@@ -164,11 +166,11 @@ public class UserInterface extends Entity {
 			}
 			break;
 		case FILL:
-			if(Mouse.getButtonDown(1)) {
+			if(Game.mouse.getButtonDown(1)) {
 				if(!isDragging) {
 					isDragging = true;
-					dragX = (int) Math.floor(((Mouse.getX() / Game.scale/Screen.zoom) + level.xOffset) / 16);
-					dragY = (int) Math.floor(((Mouse.getY() / Game.scale/Screen.zoom) + level.yOffset) / 16);
+					dragX = (int) Math.floor(((Game.mouse.getX() / Game.scale/Screen.zoom) + level.xOffset) / 16);
+					dragY = (int) Math.floor(((Game.mouse.getY() / Game.scale/Screen.zoom) + level.yOffset) / 16);
 				}
 			}else {
 				if(isDragging) {
